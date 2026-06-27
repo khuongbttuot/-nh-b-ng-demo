@@ -5,46 +5,95 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thư viện ảnh của Khương</title>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f4f9; text-align: center; padding: 20px; }
-        h1 { color: #333; }
+        /* CHUYỂN SANG MÀU TỐI */
+        body { 
+            font-family: Arial, sans-serif; 
+            background-color: #121212; /* Màu nền đen nhám */
+            color: #ffffff; /* Màu chữ trắng */
+            text-align: center; 
+            padding: 20px; 
+            margin: 0;
+        }
+        h1 { color: #f0f0f0; margin-bottom: 30px; }
+        
         .gallery { 
             display: flex; 
             flex-wrap: wrap; 
             justify-content: center; 
-            gap: 15px; 
-            margin-top: 20px; 
+            gap: 20px; 
         }
-        .gallery img { 
-            width: 300px; /* Bạn có thể chỉnh kích thước ảnh ở đây */
+        
+        /* Chỉnh khung chứa ảnh để đặt số lên trên */
+        .image-container {
+            position: relative;
+            width: 300px;
+        }
+        
+        .image-container img { 
+            width: 100%; 
             height: auto; 
             border-radius: 10px; 
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+            box-shadow: 0 4px 8px rgba(255,255,255,0.05); 
             transition: transform 0.3s ease;
+            display: block;
         }
-        .gallery img:hover {
-            transform: scale(1.05); /* Hiệu ứng phóng to nhẹ khi di chuột vào ảnh */
+        
+        .image-container img:hover {
+            transform: scale(1.05);
+        }
+        
+        /* SỐ HIỂN THỊ TRÊN ẢNH */
+        .image-number {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #00ffcc; /* Màu số xanh neon cho nổi bật */
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 18px;
+            pointer-events: none;
+            border: 1px solid #00ffcc;
         }
     </style>
 </head>
 <body>
 
-    <h1>Thư viện ảnh Demo</h1>
+    <h1>Thư viện ảnh Demo (Dark Mode)</h1>
 
-    <div class="gallery">
-        <!-- Dựa vào ảnh cũ, mình thấy bạn đặt tên file là 1.png, 2.png... Nếu tên khác, bạn nhớ sửa lại phần src="..." nhé -->
-        <img src="1.png" alt="Ảnh 1">
-        <img src="2.png" alt="Ảnh 2">
-        <img src="3.png" alt="Ảnh 3">
-        <img src="4.png" alt="Ảnh 4">
-        <img src="5.png" alt="Ảnh 5">
-        <img src="6.png" alt="Ảnh 6">
-        <img src="7.png" alt="Ảnh 7">
-        <img src="8.png" alt="Ảnh 8">
-        <img src="9.png" alt="Ảnh 9">
-        <img src="10.png" alt="Ảnh 10">
-        <img src="11.png" alt="Ảnh 11">
-        <!-- Nếu có nhiều ảnh hơn, bạn cứ copy dòng trên và đổi số đi là được -->
+    <div class="gallery" id="gallery-container">
+        <!-- Ảnh sẽ tự động được thêm vào đây bằng Javascript -->
     </div>
 
+    <script>
+        const gallery = document.getElementById('gallery-container');
+        
+        // Vòng lặp tự động quét từ ảnh 1.png đến 40.png (có thể tăng số 40 lên nếu bạn có nhiều ảnh hơn)
+        for (let i = 1; i <= 40; i++) {
+            const div = document.createElement('div');
+            div.className = 'image-container';
+            
+            const img = document.createElement('img');
+            img.src = i + '.png';
+            img.alt = 'Ảnh ' + i;
+            
+            // GIẢM LAG: Kỹ thuật Lazy loading chỉ tải ảnh khi người dùng cuộn chuột tới
+            img.loading = 'lazy'; 
+            
+            // TỰ ĐỘNG LỌC ẢNH LỖI: Nếu ảnh số đó không tồn tại (ví dụ bị nhảy số), web sẽ tự ẩn khung đó đi
+            img.onerror = function() {
+                this.parentElement.style.display = 'none';
+            };
+
+            const numberSpan = document.createElement('span');
+            numberSpan.className = 'image-number';
+            numberSpan.innerText = i; // Đặt số của tên ảnh
+
+            div.appendChild(img);
+            div.appendChild(numberSpan);
+            gallery.appendChild(div);
+        }
+    </script>
 </body>
 </html>
