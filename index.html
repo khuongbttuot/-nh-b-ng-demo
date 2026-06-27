@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thư viện ảnh của Khương</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f9; text-align: center; padding: 20px; }
+        h1 { color: #333; }
+        .gallery { 
+            display: flex; 
+            flex-wrap: wrap; 
+            justify-content: center; 
+            gap: 15px; 
+            margin-top: 20px; 
+        }
+        .gallery img { 
+            width: 300px; /* Bạn có thể chỉnh kích thước ảnh ở đây */
+            height: auto; 
+            border-radius: 10px; 
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+            transition: transform 0.3s ease;
+        }
+        .gallery img:hover {
+            transform: scale(1.05); /* Hiệu ứng phóng to nhẹ khi di chuột vào ảnh */
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Thư viện ảnh Demo</h1>
+
+    <div class="gallery">
+        <!-- Dựa vào ảnh cũ, mình thấy bạn đặt tên file là 1.png, 2.png... Nếu tên khác, bạn nhớ sửa lại phần src="..." nhé -->
+        <img src="1.png" alt="Ảnh 1">
+        <img src="2.png" alt="Ảnh 2">
+        <img src="3.png" alt="Ảnh 3">
+        <img src="4.png" alt="Ảnh 4">
+        <img src="5.png" alt="Ảnh 5">
+        <img src="6.png" alt="Ảnh 6">
+        <img src="7.png" alt="Ảnh 7">
+        <img src="8.png" alt="Ảnh 8">
+        <img src="9.png" alt="Ảnh 9">
+        <img src="10.png" alt="Ảnh 10">
+        <img src="11.png" alt="Ảnh 11">
+        <!-- Nếu có nhiều ảnh hơn, bạn cứ copy dòng trên và đổi số đi là được -->
+    </div>
+
+</body>
+</html>
