@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thư viện ảnh của Khương</title>
+    <title>Thư viện bảng xếp hạng bot tính điểm EM DỪA</title>
     <style>
-        /* --- Giao diện tối màu (Dark Mode) & Giảm lag --- */
+        /* --- GIAO DIỆN TỐI MÀU (DARK MODE) --- */
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #121212; 
@@ -13,7 +13,7 @@
             text-align: center; 
             padding: 20px; 
             margin: 0;
-            user-select: none; /* Ngăn bôi đen văn bản khi click nhanh */
+            user-select: none; 
         }
         h1 { color: #ffffff; margin-bottom: 30px; font-weight: 300; }
         
@@ -25,18 +25,22 @@
             padding-bottom: 50px;
         }
         
-        /* --- Khung chứa ảnh & Số thứ tự --- */
+        /* --- KHUNG CHỨA ẢNH & TỐI ƯU TỐC ĐỘ (CSS) --- */
         .image-container {
             position: relative;
             width: 300px;
-            cursor: pointer; /* Hiển thị con trỏ tay khi di chuột vào */
+            cursor: pointer; 
             overflow: hidden;
             border-radius: 12px;
             transition: box-shadow 0.3s ease;
+            
+            /* Tăng tốc độ render web cực mạnh */
+            content-visibility: auto; 
+            contain-intrinsic-size: 300px 170px; /* Kích thước dự kiến giữ chỗ */
         }
         
         .image-container:hover {
-            box-shadow: 0 8px 20px rgba(0, 255, 204, 0.2); /* Hiệu ứng đổ bóng màu xanh khi hover */
+            box-shadow: 0 8px 20px rgba(0, 255, 204, 0.2); 
         }
         
         .image-container img { 
@@ -44,48 +48,45 @@
             height: auto; 
             display: block;
             transition: transform 0.5s ease;
+            background-color: #1e1e1e; /* Màu nền chờ load ảnh */
         }
         
-        /* Hiệu ứng phóng to nhẹ ảnh khi di chuột vào */
         .image-container:hover img {
             transform: scale(1.08);
         }
         
-        /* --- Số thứ tự trên ảnh --- */
+        /* --- SỐ THỨ TỰ --- */
         .image-number {
             position: absolute;
             top: 12px;
             left: 12px;
             background-color: rgba(0, 0, 0, 0.75);
-            color: #00ffcc; /* Màu xanh neon */
+            color: #00ffcc; 
             padding: 6px 14px;
             border-radius: 8px;
             font-weight: bold;
             font-size: 16px;
-            pointer-events: none; /* Không nhận sự kiện click */
+            pointer-events: none; 
             border: 1px solid rgba(0, 255, 204, 0.3);
             z-index: 10;
         }
 
-        /* =========================================================
-           --- CSS cho Khung xem ảnh lớn (Lightbox Overlay) ---
-           ========================================================= */
+        /* --- KHUNG XEM ẢNH LỚN (LIGHTBOX) --- */
         .lightbox-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.9); /* Nền đen mờ */
-            display: none; /* Mặc định ẩn */
+            background-color: rgba(0, 0, 0, 0.9);
+            display: none; 
             justify-content: center;
             align-items: center;
-            z-index: 1000; /* Hiển thị trên cùng */
+            z-index: 1000; 
             opacity: 0;
             transition: opacity 0.3s ease;
         }
         
-        /* Khi lightbox được mở */
         .lightbox-overlay.active {
             display: flex;
             opacity: 1;
@@ -100,12 +101,10 @@
             transition: transform 0.3s ease;
         }
         
-        /* Hiệu ứng phóng to khi ảnh lớn xuất hiện */
         .lightbox-overlay.active .lightbox-image {
             transform: scale(1);
         }
         
-        /* Nút đóng (X) */
         .close-lightbox {
             position: absolute;
             top: 20px;
@@ -124,13 +123,14 @@
 </head>
 <body>
 
-    <h1>Thư viện ảnh Bảng xếp hạng bot tính điểm EM DỪA</h1>
+    <!-- ĐÃ ĐỔI TÊN TIÊU ĐỀ THEO YÊU CẦU -->
+    <h1>Thư viện bảng xếp hạng bot tính điểm EM DỪA</h1>
 
     <div class="gallery" id="gallery-container">
-        <!-- Ảnh sẽ được tự động thêm vào đây bằng JavaScript -->
+        <!-- Javascript sẽ xử lý việc nhét ảnh vào đây -->
     </div>
 
-    <!-- Khung xem ảnh lớn (Lightbox) -->
+    <!-- KHUNG LIGHTBOX -->
     <div class="lightbox-overlay" id="lightbox">
         <span class="close-lightbox" id="close-btn">&times;</span>
         <img src="" alt="Ảnh lớn" class="lightbox-image" id="lightbox-img">
@@ -138,16 +138,17 @@
 
     <script>
         const gallery = document.getElementById('gallery-container');
+        const fragment = document.createDocumentFragment(); // TỐI ƯU JS: Đóng gói thẻ để ném ra web 1 lần duy nhất
+        
         const lightbox = document.getElementById('lightbox');
         const lightboxImg = document.getElementById('lightbox-img');
         const closeBtn = document.getElementById('close-btn');
         
-        // --- 1. Tự động tạo thư viện ảnh (từ 1.png đến 40.png) ---
-        for (let i = 1; i <= 40; i++) {
+        // Vòng lặp nâng lên quét 200 ảnh thoải mái
+        for (let i = 1; i <= 200; i++) {
             const div = document.createElement('div');
             div.className = 'image-container';
             
-            // Thiết lập sự kiện click để mở ảnh lớn
             div.onclick = function() {
                 openLightbox(i + '.png');
             };
@@ -155,48 +156,50 @@
             const img = document.createElement('img');
             img.src = i + '.png';
             img.alt = 'Bảng ' + i;
-            img.loading = 'lazy'; // Giảm lag: chỉ tải khi cuộn tới
             
-            // Tự động ẩn khung nếu ảnh không tồn tại
+            // --- CÁC THÔNG SỐ TĂNG TỐC LOAD ẢNH BÀN THỜ ---
+            img.loading = 'lazy'; // Chỉ tải khi cuộn tới
+            img.decoding = 'async'; // Tránh làm đơ trang khi xử lý ảnh nặng
+            
+            // Ẩn mượt mà các ảnh bị thiếu
             img.onerror = function() {
                 this.parentElement.style.display = 'none';
             };
 
             const numberSpan = document.createElement('span');
             numberSpan.className = 'image-number';
-            numberSpan.innerText = i; // Số thứ tự
+            numberSpan.innerText = i; 
 
             div.appendChild(img);
             div.appendChild(numberSpan);
-            gallery.appendChild(div);
+            
+            fragment.appendChild(div); // Nhét tạm vào hộp
         }
         
-        // --- 2. Xử lý logic Lightbox (Xem ảnh lớn) ---
+        // Đổ toàn bộ hộp ra giao diện (nhanh gấp nhiều lần nhét lẻ tẻ)
+        gallery.appendChild(fragment);
         
+        // --- XỬ LÝ ĐÓNG/MỞ ẢNH LỚN ---
         function openLightbox(imageSrc) {
-            lightboxImg.src = imageSrc; // Gán nguồn ảnh lớn
-            lightbox.classList.add('active'); // Hiển thị lightbox
-            document.body.style.overflow = 'hidden'; // Ngăn cuộn trang nền
+            lightboxImg.src = imageSrc; 
+            lightbox.classList.add('active'); 
+            document.body.style.overflow = 'hidden'; 
         }
         
         function closeLightbox() {
-            lightbox.classList.remove('active'); // Ẩn lightbox
-            document.body.style.overflow = ''; // Cho phép cuộn trang lại
-            // Xóa src sau khi đóng để tránh hiện ảnh cũ khi mở ảnh mới
+            lightbox.classList.remove('active'); 
+            document.body.style.overflow = ''; 
             setTimeout(() => { lightboxImg.src = ''; }, 300);
         }
         
-        // Đóng khi click vào nút X
         closeBtn.onclick = closeLightbox;
         
-        // Đóng khi click ra ngoài vùng ảnh lớn
         lightbox.onclick = function(e) {
             if (e.target !== lightboxImg) {
                 closeLightbox();
             }
         };
         
-        // Đóng khi nhấn phím ESC
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape' && lightbox.classList.contains('active')) {
                 closeLightbox();
